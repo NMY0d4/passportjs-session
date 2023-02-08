@@ -31,3 +31,15 @@ const verifyCallback = (username, password, done) => {
 const Strategy = new LocalStrategy(customFields, verifyCallback);
 
 passport.use(Strategy);
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((userId, done) => {
+    User.findById(userId)
+        .then((user) => {
+            done(null, user);
+        })
+        .catch((err) => done(err));
+});
