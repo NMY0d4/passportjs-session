@@ -20,7 +20,10 @@ mongoose.connection.once("open", () => {
     console.log("MongoDB Connection ready!");
 });
 
-const connection = mongoose.createConnection(conn);
+const connection = mongoose.createConnection(conn, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 // Creates simple schema for a User.  The hash and salt are derived from the user's given password when they register
 const UserSchema = new mongoose.Schema({

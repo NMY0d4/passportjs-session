@@ -31,7 +31,7 @@ const PORT = process.env.PORT;
  */
 const sessionStore = new MongoStore({
     mongooseConnection: connection,
-    collection: session,
+    collection: "session",
 });
 
 app.use(

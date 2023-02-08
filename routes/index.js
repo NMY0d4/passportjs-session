@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
-const passwordUtils = require("../lib/passwordUtils");
+const genPassword = require("../lib/passwordUtils").genPassword;
 const connection = require("../config/database");
 const User = connection.models.User;
 
@@ -12,7 +12,24 @@ const User = connection.models.User;
 router.post("/login", passport.authenticate("local"), (req, res, next) => {});
 
 // TODO
-router.post("/register", (req, res, next) => {});
+router.post("/register", (req, res, next) => {
+    // console.log(`ICI ----> ${req.body.username}`);
+    const saltHash = genPassword(req.body.password);
+
+    const salt = saltHash.salt;
+    const hash = saltHash.hash;
+
+    const newUser = new User({
+        username: req.body.username,
+        hash,
+        salt,
+    });
+
+    newUser.save().then((user) => {
+        console.log(user);
+    });
+    res.redirect("/login");
+});
 
 /**
  * -------------- GET ROUTES ----------------
@@ -36,7 +53,7 @@ router.get("/login", (req, res, next) => {
 // When you visit http://localhost:3000/register, you will see "Register Page"
 router.get("/register", (req, res, next) => {
     const form =
-        '<h1>Register Page</h1><form method="post" action="/register">\
+        '<h1>Register Page</h1><form method="post" action="register">\
                     Enter Username:<br><input type="text" name="username">\
                     <br>Enter Password:<br><input type="password" name="password">\
                     <br><br><input type="submit" value="Submit"></form>';
