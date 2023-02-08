@@ -24,6 +24,7 @@ var app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const PORT=process.env.PORT;
 
 /**
  * -------------- SESSION SETUP ----------------
@@ -64,4 +65,4 @@ app.use(routes);
  */
 
 // Server listens on http://localhost:3000
-app.listen(3000);
+app.listen(PORT);
